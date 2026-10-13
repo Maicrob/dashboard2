@@ -69,7 +69,8 @@ const aFila = m => {
 
 async function guardar(filas) {
   for (let i = 0; i < filas.length; i += 500) {
-    const res = await fetch(`${SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/movimientos?on_conflict=fintoc_id`, {
+    const baseUrl = (process.env.SUPABASE_URL || "").trim().replace(/\/+$/, "");
+    const res = await fetch(`${baseUrl}/rest/v1/movimientos?on_conflict=fintoc_id`, {
       method: "POST",
       headers: {
         apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
