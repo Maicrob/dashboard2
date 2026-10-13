@@ -2,9 +2,9 @@ name: Sync Fintoc
 
 on:
   schedule:
-    # Se ejecuta automáticamente cada 3 horas
+   
     - cron: '0 */3 * * *'
-  # Permite ejecutarlo manualmente con un clic
+  
   workflow_dispatch:
 
 jobs:
