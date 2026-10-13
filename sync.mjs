@@ -1,11 +1,20 @@
 // Sincroniza movimientos de Fintoc (solo lectura) -> Supabase. Requiere Node 18+.
-const {
-  FINTOC_SECRET_KEY, FINTOC_LINK_TOKEN, FINTOC_ACCOUNT_IDS,
-  SUPABASE_URL, SUPABASE_SERVICE_KEY, SINCE_DAYS = "90"
-} = process.env;
+const FINTOC_SECRET_KEY = process.env.FINTOC_SECRET_KEY;
+const FINTOC_LINK_TOKEN = process.env.FINTOC_LINK_TOKEN;
+const FINTOC_ACCOUNT_IDS = process.env.FINTOC_ACCOUNT_IDS;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SINCE_DAYS = process.env.SINCE_DAYS || "90";
 
-for (const [k, v] of Object.entries({ FINTOC_SECRET_KEY, FINTOC_LINK_TOKEN, SUPABASE_URL, SUPABASE_SERVICE_KEY }))
-  if (!v) { console.error(`Falta el secreto: ${k}`); process.exit(1); }
+const requeridos = { FINTOC_SECRET_KEY, FINTOC_LINK_TOKEN, SUPABASE_URL, SUPABASE_SERVICE_KEY };
+
+for (const [k, v] of Object.entries(requeridos)) {
+  if (!v) {
+    console.error(`Falta el secreto: ${k}`);
+    console.error("Variables detectadas en entorno:", Object.keys(process.env).filter(x => x.startsWith("FINTOC") || x.startsWith("SUPABASE")));
+    process.exit(1);
+  }
+}
 
 // ---- Categorías automáticas (Fintoc no las entrega). Edita a tu gusto. ----
 const REGLAS = [
