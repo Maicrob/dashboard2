@@ -1,1 +1,30 @@
+name: Sync Fintoc
 
+on:
+  schedule:
+    # Se ejecuta automáticamente cada 3 horas
+    - cron: '0 */3 * * *'
+  # Permite ejecutarlo manualmente con un clic
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Ejecutar script de sincronizacion
+        env:
+          FINTOC_SECRET_KEY: ${{ secrets.FINTOC_SECRET_KEY }}
+          FINTOC_LINK_TOKEN: ${{ secrets.FINTOC_LINK_TOKEN }}
+          FINTOC_ACCOUNT_ID: ${{ secrets.FINTOC_ACCOUNT_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node sync.mjs
